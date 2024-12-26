@@ -1,6 +1,7 @@
 import { BadRequestError, InternalError } from '../errors/main.error';
-import { IUser, ICreateUser, ICredentialUser, IUserToken } from '../interfaces/main.interface';
+import { IUser, ICreateUser } from '../interfaces/main.interface';
 import { ICredentials } from '../interfaces/main.interface';
+import { JWT_SECRET_KEY } from '../config//configs';
 import { Utils } from '../utility/utils';
 import BaseService from './base.service';
 
@@ -27,7 +28,7 @@ class UserService extends BaseService {
                 },
             });
             
-            await this.db.pacient.create({
+            await this.db.patient.create({
                 data: {
                     firstName: data.firstName,
                     lastName: data.lastName,
@@ -69,19 +70,23 @@ class UserService extends BaseService {
                 return;
             }
 
-            const pacient = await this.db.pacient.findUnique({
+            const patient = await this.db.patient.findUnique({
                 where: { userId: user.id }
             });
         
-            const token = utils.generateToken({
-                email: user.email,
-                firstName: pacient!.firstName,
-                lastName: pacient!.lastName,
-                birthday: pacient!.birthday,
-                gender: pacient!.gender,
-                id: user.id,
-            })
-            this.updateToken(user.id, token);
+            const token = utils.generateToken(
+                {
+                    patient:{
+                        firstName: patient!.firstName,
+                        lastName: patient!.lastName,
+                        birthday: patient!.birthday,
+                        gender: patient!.gender,
+                    },
+                    id: user.id,
+                },
+                JWT_SECRET_KEY
+            )
+            await this.addTokenToUser(user.id, token);
             return token;
         } catch (error) {
             console.error(error);
@@ -89,7 +94,7 @@ class UserService extends BaseService {
         }
     };
 
-    public async updateToken(userId: number, token: string): Promise<void> {
+    public async addTokenToUser(userId: number, token: string): Promise<void> {
         try {
             await this.db.user.update({
                 where: { id: userId },
@@ -98,6 +103,16 @@ class UserService extends BaseService {
                     lastLogin: new Date()
                 }
             });
+        } catch (error) {
+            console.error(error);
+            if (error instanceof BadRequestError) throw new BadRequestError(error.message, error.data);
+            throw new InternalError();
+        }
+    }
+
+    public refreshToken(userId: number, token: string) {
+        try {
+            
         } catch (error) {
             console.error(error);
             if (error instanceof BadRequestError) throw new BadRequestError(error.message, error.data);

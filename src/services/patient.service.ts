@@ -1,29 +1,27 @@
 import { BadRequestError, InternalError } from '../errors/main.error';
-import { Utils } from '../utility/utils';
 import BaseService from './base.service';
 
-const utils = new Utils();
 
-class PacientService extends BaseService {
+class PatientService extends BaseService {
     public async getHistory(userId: number) {
         try {
-            const pacient = await this.db.pacient.findFirst({
+            const patient = await this.db.patient.findFirst({
                 where: { userId },
             });
 
-            if (!pacient) {
-                throw new BadRequestError('No pacient found');
+            if (!patient) {
+                throw new BadRequestError('No patient found');
             }
 
-            const history = await this.db.diagnosisByPacient.findMany({
-                where: { pacientId: pacient.id },
+            const history = await this.db.diagnosisByPatient.findMany({
+                where: { patientId: patient.id },
                 include: {
                     diagnosis: {
                         include: {
                             symptoms: true
                         },
                     },
-                    pacient: {
+                    patient: {
                         select: {
                             firstName: true,
                             lastName: true,
@@ -42,4 +40,4 @@ class PacientService extends BaseService {
     }
 }
 
-export { PacientService };
+export { PatientService };

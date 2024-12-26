@@ -23,6 +23,15 @@ export interface ICredentialUser {
 }
 
 type IUserProfile = Partial<Omit<IUser, "password">>;
-export interface IUserToken extends IUserProfile {
+
+export interface IPatient {
+    firstName: string;
+    lastName: string;
+    gender: string;
+    birthday: Date;
+}
+
+export interface IUserToken {
     id: number;
+    patient: IPatient
 }

@@ -39,7 +39,3 @@ export interface IDiagnosisResponse extends IDiagnosis{
     id: number;
     specialisations: Prisma.JsonValue;
 }
-
-export interface IDiagnosisBody {
-    symptoms: number[];
-}

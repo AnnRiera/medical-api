@@ -9,11 +9,11 @@ import { Prisma } from '@prisma/client';
 const utils = new Utils();
 
 class DiagnosisService extends BaseService {
-    public async create(symptoms: IFormattedSymptom[], pacientInfo: IUserToken) {
-        const yearOfBirth = new Date(pacientInfo.birthday!).getFullYear();
+    public async create(symptoms: IFormattedSymptom[], patientInfo: IUserToken) {
+        const yearOfBirth = new Date(patientInfo.patient.birthday!).getFullYear();
         try {
             const listOfSymtoms = symptoms.map((value) => value.symptomId).join(',');
-            const diagnosis: IDiagnosisResponseStructure[] = await this.list(listOfSymtoms, pacientInfo.gender!, yearOfBirth);
+            const diagnosis: IDiagnosisResponseStructure[] = await this.list(listOfSymtoms, patientInfo.patient.gender, yearOfBirth);
             const createdDiagnosis: IDiagnosisResponse[] = [];
 
             for (let dgn of diagnosis) {
@@ -44,10 +44,10 @@ class DiagnosisService extends BaseService {
                     }
                 });
 
-                await this.db.diagnosisByPacient.create({
+                await this.db.diagnosisByPatient.create({
                     data: {
                         diagnoseId: savedDiagnosis.id,
-                        pacientId: pacientInfo.id
+                        patientId: patientInfo.id
                     }
                 });
             }

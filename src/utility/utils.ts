@@ -1,11 +1,15 @@
-import { JWT_SECRET_KEY, API_MEDIC_SECRET_KEY, API_MEDIC_URI, API_MEDIC_API_KEY } from '../config//configs';
-import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import { IUserToken } from '../interfaces/main.interface';
-import axios from 'axios';
-import { InternalError } from '../errors/intersalServer.error';
+import { InternalError } from '../errors/intersalServer.error';import bcrypt from 'bcryptjs';
 import { BadRequestError } from '../errors/badRequest.error';
+import { IUserToken } from '../interfaces/main.interface';
+import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import { 
+    JWT_REFRESH_SECRET_KEY,
+    API_MEDIC_SECRET_KEY,
+    API_MEDIC_URI,
+    API_MEDIC_API_KEY
+} from '../config//configs';
+import axios from 'axios';
 
 class Utils {
     public encrypt(password: string): string {
@@ -17,15 +21,19 @@ class Utils {
         return bcrypt.compareSync(password, savedPassword);
     };
 
-    public generateToken(user: IUserToken) {
-        return jwt.sign(user, JWT_SECRET_KEY, { expiresIn: '1d'});
+    public generateToken(user: IUserToken, secret: string): string {
+        return jwt.sign(user, secret, { expiresIn: '1d'});
+    }
+
+    public refreshToken(user: IUserToken): string {
+        return jwt.sign(user, JWT_REFRESH_SECRET_KEY, { expiresIn: '1d'});
     }
 
     public decodeToken(token: string): string | jwt.JwtPayload | null {
         return jwt.decode(token);
     }
 
-    public generateHash() {
+    public generateHash(): string {
         const computedHash = crypto.createHmac('md5', API_MEDIC_SECRET_KEY);
         computedHash.update(API_MEDIC_URI);
         return computedHash.digest('base64');
@@ -53,12 +61,11 @@ class Utils {
         }
     }
 
-    public getSession(header: string) {
-        const token = header.replace('Bearer ', '');
-        return this.decodeToken(token!);
-    }
-
-    public async request(method: string, url: string) {
+    public async request(method: string, url: string): Promise<{
+        data: any;
+        status: number;
+        statusText: string;
+    }> {
         try {
             const { data, status, statusText } = await axios.request({
                 url: url,
