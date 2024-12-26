@@ -5,11 +5,19 @@ In order to execute this project, please consider certain things:
 - Node.js version 20.6 is required to be executed, due to internal project configurations.
 - It was decided to use [Prisma](https://www.prisma.io/) as ORM and Postgres as database engine, it was configured in a `docker-compose.yml` that must be run locally through the `docker compose up` command.
 - A `.env` file that handles the environment variables is used, and there's an example of the variables needed to execute available in the `.example.env` file.
-- Para correr el proyecto hace falta levantar docker:
+- To run the project it is necessary to install docker:
 
 ```
 docker compose up
 ```
+- This is the suggested order in how to use the endpoints:
+```
+1. Create a user
+2. Login
+3. Create a symptom
+4. Create a diagnosis
+```
+- Unfortunately, this API doesn't have refresh token function because I ran out of time, but it was meant to have it.
 
 **NOTA**: Prisma by default generates a variable called `DATABASE_URL` that is used in the `schema.prisma` file, and that same variable is the one used for the instantiation of the Prisma class.
 
