@@ -51,26 +51,26 @@ npm run dev
 **POST** `/api/user/create`: this endpoint receives through the body the information of the user to be created. Receives in the body:
 
 ```json
-    {
-        "firstName": "Jane",
-        "lastName": "Doe",
-        "email": "test@email.com",
-        "gender": "female",
-        "birthday": "01/01/1995",
-        "password": "tes12345"
-    }
+{
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "email": "test@email.com",
+    "gender": "female",
+    "birthday": "01/01/1995",
+    "password": "tes12345"
+}
 ```
 
 **POST** `/api/user/login`: returns the access token to be able to use the protected endpoints. Receives in the body:
 
 ```json
-    {
-        "email": "test@email.com",
-        "password": "tes12345"
-    }
+{
+    "email": "test@email.com",
+    "password": "tes12345"
+}
 ```
 
-### PACIENT
+### PATIENT
 
 **GET** `/api/patient/history`: returns the patient's medical history, showing all the patient's previous diagnoses.
 
@@ -84,15 +84,15 @@ npm run dev
 
 **POST** `/api/diagnosis/create`: is used to create diagnoses in APiMedic to be saved in the database. It receives in the body an array of symptoms:
 ``` json
-    {
-        “symptoms": [
-            {
-                “id": 1,
-                “symptomId": 9,
-                “name": "Headache"
-            }
-        ]
-    }
+{
+    "symptoms": [
+        {
+            "id": 1,
+            "symptomId": 9,
+            "name": "Headache"
+        }
+    ]
+}
 ```
 
 Where:
