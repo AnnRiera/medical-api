@@ -3,8 +3,7 @@ import { BadRequestError } from '../errors/badRequest.error';
 import { IUserToken } from '../interfaces/main.interface';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import { 
-    JWT_REFRESH_SECRET_KEY,
+import {
     API_MEDIC_SECRET_KEY,
     API_MEDIC_URI,
     API_MEDIC_API_KEY
@@ -23,10 +22,6 @@ class Utils {
 
     public generateToken(user: IUserToken, secret: string): string {
         return jwt.sign(user, secret, { expiresIn: '1d'});
-    }
-
-    public refreshToken(user: IUserToken): string {
-        return jwt.sign(user, JWT_REFRESH_SECRET_KEY, { expiresIn: '1d'});
     }
 
     public decodeToken(token: string): string | jwt.JwtPayload | null {

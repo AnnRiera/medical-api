@@ -9,7 +9,6 @@ export const configs: Prisma.Datasource = {
 export const APP_PORT = process.env.PORT || 3000;
 // JWT configuration
 export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY ?? '';
-export const JWT_REFRESH_SECRET_KEY = process.env.JWT_REFRESH_SECRET_KEY ?? '';
 // ApiMedic configuration
 export const API_MEDIC_API_KEY = process.env.API_MEDIC_API_KEY ?? '';
 export const API_MEDIC_SECRET_KEY = process.env.API_MEDIC_SECRET_KEY ?? '';
