@@ -19,7 +19,7 @@ docker compose up
 ```
 - Unfortunately, this API doesn't have refresh token function because I ran out of time, but it was meant to have it.
 
-**NOTA**: Prisma by default generates a variable called `DATABASE_URL` that is used in the `schema.prisma` file, and that same variable is the one used for the instantiation of the Prisma class.
+**NOTE**: Prisma by default generates a variable called `DATABASE_URL` that is used in the `schema.prisma` file, and that same variable is the one used for the instantiation of the Prisma class.
 
 ## How to
 To install dependencies:
