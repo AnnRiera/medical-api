@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IUser } from '../interfaces/main.interface';
+import { ICreateUser, ICredentials, IUser, ICredentialUser} from '../interfaces/main.interface';
 import { UserService } from '../services/user.service';
 import { InternalError } from '../errors/intersalServer.error';
 
@@ -10,7 +10,7 @@ class UserController {
         req: Request,
         res: Response
     ) {
-        const { firstName, lastName, email, gender, birthday, username, password } = req.body;
+        const { firstName, lastName, email, gender, birthday, password } = req.body;
 
         const user: IUser = {
             firstName,
@@ -18,20 +18,39 @@ class UserController {
             email,
             gender,
             birthday,
-            username,
             password,
         }
         try {
-            const data = await userService.create(user);
-
-            if (!data.created) {
-                res.status(400).json({ message: data.message });
-            }
-
+            const data: ICreateUser = await userService.create(user);
             res.status(201).json({ message: data.message });
         } catch (error) {
             console.error(error);
             throw new InternalError();
+        }
+    };
+
+    public async login(
+        req: Request,
+        res: Response
+    ) {
+        const { email, password } = req.body;
+
+        const user: ICredentials = {
+            email,
+            password,
+        }
+
+        try {
+            const data = await userService.login(user);
+
+            if (!data) {
+                res.status(400).json({ message: 'Invalid credentials' });
+            }
+
+            res.status(200).json({ token: data });
+        } catch (error) {
+            console.error(error);
+            throw new Error();
         }
     };
 }
