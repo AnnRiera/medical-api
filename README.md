@@ -2,7 +2,7 @@
 
 ## Considerations
 In order to execute this project, please consider certain things:
-- Node.js version 20.6 is required to be executed, due to internal project configurations and according to the documentation of [Prisma](https://www.prisma.io/docs/reference/system-requirements).
+- Node.js version 20.6 is required to be executed, due to internal project configurations.
 - It was decided to use [Prisma](https://www.prisma.io/) as ORM and Postgres as database engine, it was configured in a `docker-compose.yml` that must be run locally through the `docker compose up` command.
 - A `.env` file that handles the environment variables is used, and there's an example of the variables needed to execute available in the `.example.env` file.
 - Para correr el proyecto hace falta levantar docker:
